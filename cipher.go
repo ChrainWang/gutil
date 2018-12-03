@@ -9,6 +9,10 @@ import (
 	"errors"
 )
 
+// Padding machanism is used to ensure that the data is encryptable by AES
+// AES block size is constantly 16
+// If the length of source is 16, the length of dst would be 32
+// The padding is according to ANSI X.923
 func Padding(source []byte) (dst []byte, err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -56,6 +60,11 @@ func HmacSign(data, key []byte) []byte {
 	return mac.Sum(nil)
 }
 
+// CBC crypto
+// Length of initial vector(iv) must be the save as aes blocksize (16)
+// Length of key could be 16, 24 or 32
+// We recommend to use md5encode to generate available iv and key
+// We recommend to generate an Hmac signature to pass along with the encrypted data, and then verify it before decryption, in order to ensure that the encrypted data is not faked
 func CBCEncrypt(plaintext, iv, key []byte) (encrypted []byte, err error) {
 	defer func() {
 		if r := recover(); r != nil {

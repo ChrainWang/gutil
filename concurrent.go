@@ -3,8 +3,12 @@ package gutil
 import "reflect"
 
 type ConcurrentTask struct {
-	Value interface{}
+	value interface{}
 	Do    func() interface{}
+}
+
+func (self ConcurrentTask) GetValue() interface{} {
+	return self.value
 }
 
 func Concurrent(tasks []*ConcurrentTask) int {
@@ -26,7 +30,7 @@ func Concurrent(tasks []*ConcurrentTask) int {
 		if ok {
 			completeCounter++
 		}
-		tasks[chosen].Value = value.Interface()
+		tasks[chosen].value = value.Interface()
 	}
 	return completeCounter
 }
